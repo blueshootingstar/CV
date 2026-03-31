@@ -32,8 +32,8 @@ CONFIG = {
     "num_classes": 40,               # 使用多少个人的数据（最多40）
     "train_ratio": 0.7,              # 训练集比例（0.7 = 70%训练，30%测试）
     "pca_components": 50,            # PCA降维后的维度数
-    "knn_k": 3,                      # KNN的K值
-    "knn_metric": "euclidean",       # KNN距离度量：euclidean, manhattan, cosine
+    "knn_k": 1,                      # KNN的K值
+    "knn_metric": "cosine",          # KNN距离度量：euclidean, manhattan, cosine
     "random_seed": 42,               # 随机种子
 }
 # ============================================================
@@ -71,7 +71,7 @@ def load_dataset(path, num_classes):
 
 def do_pca(X_train, X_test, n_components):
     """PCA降维"""
-    pca = PCA(n_components=n_components, whiten=True)
+    pca = PCA(n_components=n_components, whiten=True, svd_solver="full")
     X_train_pca = pca.fit_transform(X_train)
     X_test_pca = pca.transform(X_test)
     return X_train_pca, X_test_pca, pca
@@ -105,7 +105,7 @@ def sweep_pca_dimension(X_train, y_train, X_test, y_test, k, metric, cfg,
     """扫描不同PCA维度对准确率的影响"""
     if dim_list is None:
         max_dim = min(X_train.shape[0], X_train.shape[1])
-        dim_list = list(range(5, min(max_dim, 81), 5))
+        dim_list = list(range(5, min(max_dim, 101), 5))
 
     accuracies = []
     for dim in dim_list:
@@ -183,12 +183,11 @@ def sweep_train_ratio(images, labels, pca_dim, k, metric, seed, cfg,
     print(f"训练比例-准确率曲线已保存：{save_path}")
     return ratio_list, accuracies
 
-
 def sweep_num_classes(dataset_path, pca_dim, k, metric, train_ratio, seed, cfg,
                       class_list=None, save_path="num_classes_accuracy.png"):
     """扫描不同分类个数对准确率的影响"""
     if class_list is None:
-        class_list = [5, 10, 15, 20, 25, 30, 35, 40]
+        class_list = (range(1, 41))
 
     accuracies = []
     for nc in class_list:
@@ -214,7 +213,6 @@ def sweep_num_classes(dataset_path, pca_dim, k, metric, train_ratio, seed, cfg,
     plt.show()
     print(f"分类个数-准确率曲线已保存：{save_path}")
     return class_list, accuracies
-
 
 def sweep_knn_metric(X_train_pca, y_train, X_test_pca, y_test, k, cfg,
                      metric_list=None, save_path="knn_metric_accuracy.png"):
@@ -312,6 +310,16 @@ if __name__ == "__main__":
     print("\n--- 扫描距离度量 ---")
     sweep_knn_metric(X_train_pca, y_train, X_test_pca, y_test,
                      cfg["knn_k"], cfg)
+
+    print("\n" + "=" * 50)
+    print("CONFIG基准配置最终结果：")
+    print(f"  分类个数: {cfg['num_classes']}")
+    print(f"  训练集比例: {cfg['train_ratio']}")
+    print(f"  PCA维度: {cfg['pca_components']}")
+    print(f"  KNN的K值: {cfg['knn_k']}")
+    print(f"  距离度量: {cfg['knn_metric']}")
+    print(f"  准确率: {acc:.4f} ({acc * 100:.2f}%)")
+    print("=" * 50)
 
     print("全部完成！")
 
