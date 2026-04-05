@@ -21,9 +21,9 @@ plt.rcParams['axes.unicode_minus'] = False
 # 实验配置区域
 # ============================================================
 CONFIG = {
-    'data_path': 'orl_faces',   # 数据集路径
+    'data_path': 'ORL',         # 数据集路径
     'num_classes': 40,          # 类别数
-    'train_ratio': 0.7,         # 训练集比例
+    'train_ratio': 0.8,         # 训练集比例
     'pca_components': 50,       # 基准 PCA 降维维度
     'knn_k': 1,                 # 基准 KNN 邻居数
     'knn_metric': 'cosine',     # 基准 KNN 距离度量
@@ -128,7 +128,7 @@ def run_experiment(X_train, X_test, y_train, y_test, n_components, k, metric, h,
     """运行单次实验逻辑"""
     # PCA 降维 (这里确保 n_components 不超过样本数)
     actual_components = min(n_components, X_train.shape[0], X_train.shape[1])
-    pca = PCA(n_components=actual_components, whiten=True, random_state=CONFIG['random_seed'])
+    pca = PCA(n_components=actual_components, whiten=True, svd_solver="full")
     
     X_train_pca = pca.fit_transform(X_train)
     X_test_pca = pca.transform(X_test)
