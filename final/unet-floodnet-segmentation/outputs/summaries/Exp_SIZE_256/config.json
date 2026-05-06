@@ -1,0 +1,15 @@
+{
+  "experiment_name": "Exp_SIZE_256",
+  "image_size": 256,
+  "learning_rate": 0.0001,
+  "augmentation": "flip",
+  "loss": "ce",
+  "epochs": 10,
+  "subset_ratio": 0.3,
+  "train_limit": null,
+  "val_limit": null,
+  "batch_size": 16,
+  "num_workers": 4,
+  "use_amp": true,
+  "base_channels": 32
+}

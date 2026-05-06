@@ -1,0 +1,28 @@
+{
+  "device": "cpu",
+  "epochs": 3,
+  "history": [
+    {
+      "epoch": 1,
+      "train_loss": 0.1926,
+      "train_acc": 0.9403,
+      "test_loss": 0.0469,
+      "test_acc": 0.9849
+    },
+    {
+      "epoch": 2,
+      "train_loss": 0.0551,
+      "train_acc": 0.9828,
+      "test_loss": 0.046,
+      "test_acc": 0.9857
+    },
+    {
+      "epoch": 3,
+      "train_loss": 0.0399,
+      "train_acc": 0.9877,
+      "test_loss": 0.0326,
+      "test_acc": 0.9899
+    }
+  ],
+  "final_test_accuracy": 0.9899
+}

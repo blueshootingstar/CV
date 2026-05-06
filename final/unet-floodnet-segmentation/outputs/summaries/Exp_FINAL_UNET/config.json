@@ -1,0 +1,15 @@
+{
+  "experiment_name": "Exp_FINAL_UNET",
+  "image_size": 512,
+  "learning_rate": 0.0001,
+  "augmentation": "strong",
+  "loss": "dice",
+  "epochs": 30,
+  "subset_ratio": 1.0,
+  "train_limit": null,
+  "val_limit": null,
+  "batch_size": 8,
+  "num_workers": 4,
+  "use_amp": true,
+  "base_channels": 32
+}

@@ -1,0 +1,15 @@
+{
+  "experiment_name": "Exp_QUICK_CHECK",
+  "image_size": 256,
+  "learning_rate": 0.001,
+  "augmentation": "flip",
+  "loss": "ce",
+  "epochs": 2,
+  "subset_ratio": 1.0,
+  "train_limit": 100,
+  "val_limit": 50,
+  "batch_size": 16,
+  "num_workers": 4,
+  "use_amp": true,
+  "base_channels": 32
+}

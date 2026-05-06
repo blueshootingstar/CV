@@ -1,0 +1,17 @@
+{
+  "experiment_name": "Exp_QUICK_CHECK",
+  "best_epoch": 2,
+  "best_val_miou": 0.2683798144463409,
+  "best_val_dice": 0.3461416701104743,
+  "best_val_pixel_acc": 0.7247479248046875,
+  "final_val_miou": 0.2683798144463409,
+  "final_val_dice": 0.3461416701104743,
+  "final_val_pixel_acc": 0.7247479248046875,
+  "total_time_minutes": 0.4243325432141622,
+  "image_size": 256,
+  "learning_rate": 0.001,
+  "augmentation": "flip",
+  "loss": "ce",
+  "epochs": 2,
+  "subset_ratio": 1.0
+}

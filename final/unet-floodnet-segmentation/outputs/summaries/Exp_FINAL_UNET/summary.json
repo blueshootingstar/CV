@@ -1,0 +1,17 @@
+{
+  "experiment_name": "Exp_FINAL_UNET",
+  "best_epoch": 28,
+  "best_val_miou": 0.5611772786620703,
+  "best_val_dice": 0.68417702192133,
+  "best_val_pixel_acc": 0.8509071773952908,
+  "final_val_miou": 0.549295616142474,
+  "final_val_dice": 0.6732527233986316,
+  "final_val_pixel_acc": 0.8475385962592231,
+  "total_time_minutes": 94.74353740612666,
+  "image_size": 512,
+  "learning_rate": 0.0001,
+  "augmentation": "strong",
+  "loss": "dice",
+  "epochs": 30,
+  "subset_ratio": 1.0
+}

@@ -1,0 +1,164 @@
+\documentclass[12pt, a4paper]{article}
+
+\usepackage[UTF8]{ctex}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{enumitem}
+
+\geometry{left=2.5cm, right=2.5cm, top=3cm, bottom=3cm}
+
+\lstset{
+    language=Python,
+    basicstyle=\small\ttfamily,
+    keywordstyle=\color{blue},
+    stringstyle=\color{red},
+    commentstyle=\color{green!50!black},
+    showstringspaces=false,
+    breaklines=true,
+    frame=single,
+    numbers=left,
+    numberstyle=\tiny\color{gray}
+}
+
+\setlength{\parindent}{0pt}
+
+\begin{document}
+
+\begin{center}
+    {\LARGE \textbf{???????????} \\[1.5cm]}
+    {\large \textbf{?? 6}} \\[1.5cm]
+\end{center}
+
+\textbf{???? 1}
+
+\begin{enumerate}[label=\textbf{\alph*)}, leftmargin=*]
+
+\item \textbf{????}
+
+\begin{lstlisting}
+def create_hog_descriptor(params):
+    return cv2.HOGDescriptor(
+        _winSize=WINDOW_SIZE,
+        _blockSize=(params.block_size, params.block_size),
+        _blockStride=(params.block_stride, params.block_stride),
+        _cellSize=(params.cell_size, params.cell_size),
+        _nbins=params.nbins,
+    )
+
+def train_svm(x_train, y_train, params):
+    svm = cv2.ml.SVM_create()
+    svm.setType(cv2.ml.SVM_C_SVC)
+    svm.setKernel(cv2.ml.SVM_LINEAR)
+    svm.setC(params.c_value)
+    svm.setTermCriteria((cv2.TERM_CRITERIA_MAX_ITER, 2000, 1e-6))
+    svm.train(x_train, cv2.ml.ROW_SAMPLE, y_train)
+    return svm
+
+def build_param_grid():
+    grid = []
+    c_values = [0.001, 0.01, 0.1, 1.0]
+    bin_values = [6, 9, 12]
+
+    for cell_size, block_options in [(4, [8, 16]), (8, [16, 32])]:
+        for block_size in block_options:
+            stride_options = sorted(set([cell_size, block_size // 2]))
+            for block_stride in stride_options:
+                if block_stride >= block_size:
+                    continue
+                for nbins in bin_values:
+                    for c_value in c_values:
+                        grid.append(HogSvmParams(
+                            win_stride=8,
+                            block_size=block_size,
+                            block_stride=block_stride,
+                            cell_size=cell_size,
+                            nbins=nbins,
+                            c_value=c_value,
+                        ))
+    return grid
+
+scores = decision_function(svm, x_test)
+fpr, tpr, thresholds = roc_curve(y_test, scores)
+roc_auc = auc(fpr, tpr)
+\end{lstlisting}
+
+\item \textbf{??????}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.78\textwidth]{roc_curve.png}
+    \\[4pt]{\small Baseline ??????? ROC ??}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{cell_size_summary.png}
+        \\[2pt]{\small cell\_size ?????}
+    \end{minipage}\hfill
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{block_size_summary.png}
+        \\[2pt]{\small block\_size ?????}
+    \end{minipage}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{block_stride_summary.png}
+        \\[2pt]{\small block\_stride ?????}
+    \end{minipage}\hfill
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{block_structure_heatmap.png}
+        \\[2pt]{\small block\_size ? block\_stride ?????}
+    \end{minipage}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{heatmap_cell8_block16_stride8.png}
+        \\[2pt]{\small $nbins \times C$ ??? 1}
+    \end{minipage}\hfill
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{heatmap_cell8_block32_stride8.png}
+        \\[2pt]{\small $nbins \times C$ ??? 2}
+    \end{minipage}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.82\textwidth]{detection_demo.png}
+    \\[4pt]{\small ????????????}
+\end{figure}
+
+\item \textbf{????}
+
+??????????????????????????????????????????? $64\times128$?????????????????????????????????????????????????????????????????????????????? HOG ?????? SVM ???????????
+
+? baseline ??????????????????? 72 ?????????? AUC ????????????????
+\[
+\texttt{cell=8,\ block=16,\ stride=8,\ bins=12,\ C=0.01}
+\]
+?????? AUC ? 0.965546?baseline ??
+\[
+\texttt{cell=8,\ block=16,\ stride=8,\ bins=9,\ C=0.01}
+\]
+?????? AUC ? 0.963149?????????
+
+????????????????????\texttt{cell\_size} ???????? \texttt{cell=8} ???????? \texttt{cell=4} ????? \texttt{block\_stride} ?????\texttt{stride=8} ???????? \texttt{block\_size} ????? \texttt{block\_size $\times$ block\_stride} ???????\texttt{block=16} ? \texttt{32} ?????????? \texttt{block=16, stride=8} ?????????????? \texttt{nbins $\times$ C} ????????? \texttt{C=0.01} ??????????? \texttt{nbins=12} ? baseline ?? \texttt{nbins=9} ?????
+
+? \texttt{detection\_demo} ????????????????????????????????????ROC ???????????????? baseline ??????????
+
+\end{enumerate}
+
+\end{document}

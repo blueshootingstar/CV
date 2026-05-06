@@ -1,0 +1,17 @@
+{
+  "experiment_name": "Exp_LOSS_CE",
+  "best_epoch": 10,
+  "best_val_miou": 0.27283935292489414,
+  "best_val_dice": 0.3475515743375515,
+  "best_val_pixel_acc": 0.7696136192039207,
+  "final_val_miou": 0.27283935292489414,
+  "final_val_dice": 0.3475515743375515,
+  "final_val_pixel_acc": 0.7696136192039207,
+  "total_time_minutes": 9.969844885667165,
+  "image_size": 512,
+  "learning_rate": 0.0001,
+  "augmentation": "strong",
+  "loss": "ce",
+  "epochs": 10,
+  "subset_ratio": 0.3
+}

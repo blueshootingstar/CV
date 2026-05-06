@@ -1,0 +1,17 @@
+{
+  "experiment_name": "Exp_AUG_FLIP",
+  "best_epoch": 10,
+  "best_val_miou": 0.2684328219629798,
+  "best_val_dice": 0.34420355106880807,
+  "best_val_pixel_acc": 0.7578731960720486,
+  "final_val_miou": 0.2684328219629798,
+  "final_val_dice": 0.34420355106880807,
+  "final_val_pixel_acc": 0.7578731960720486,
+  "total_time_minutes": 7.10346892674764,
+  "image_size": 512,
+  "learning_rate": 0.0001,
+  "augmentation": "flip",
+  "loss": "ce",
+  "epochs": 10,
+  "subset_ratio": 0.3
+}

@@ -1,0 +1,64 @@
+project_name: unet_floodnet_segmentation
+data_root: ./data
+floodnet_dir: ./data/FloodNet-Supervised_v1.0
+colormask_dir: ./data/ColorMasks-FloodNetv1.0
+num_classes: 10
+seed: 42
+device: auto
+
+paths:
+  train_images: ./data/FloodNet-Supervised_v1.0/train/train-org-img
+  train_masks: ./data/FloodNet-Supervised_v1.0/train/train-label-img
+  val_images: ./data/FloodNet-Supervised_v1.0/val/val-org-img
+  val_masks: ./data/FloodNet-Supervised_v1.0/val/val-label-img
+  test_images: ./data/FloodNet-Supervised_v1.0/test/test-org-img
+  test_masks: ./data/FloodNet-Supervised_v1.0/test/test-label-img
+
+training:
+  batch_size_256: 16
+  batch_size_512: 8
+  num_workers: 4
+  use_amp: true
+  optimizer: adam
+  weight_decay: 0.0001
+
+model:
+  base_channels: 32
+
+quick_check:
+  train_limit: 100
+  val_limit: 50
+  image_size: 256
+  epochs: 2
+  lr: 0.001
+  loss: ce
+  augmentation: flip
+
+tuning:
+  subset_ratio: 0.3
+  epochs: 10
+
+final:
+  subset_ratio: 1.0
+  epochs: 30
+
+learning_rates:
+  - 0.01
+  - 0.001
+  - 0.0001
+
+image_sizes:
+  - 256
+  - 512
+
+augmentations:
+  - none
+  - flip
+  - strong
+
+losses:
+  - ce
+  - dice
+  - ce_dice
+
+selection_metric: val_miou

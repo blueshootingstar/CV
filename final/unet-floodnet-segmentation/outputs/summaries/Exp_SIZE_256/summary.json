@@ -1,0 +1,17 @@
+{
+  "experiment_name": "Exp_SIZE_256",
+  "best_epoch": 10,
+  "best_val_miou": 0.2632434713733566,
+  "best_val_dice": 0.3444968276610999,
+  "best_val_pixel_acc": 0.7332116021050348,
+  "final_val_miou": 0.2632434713733566,
+  "final_val_dice": 0.3444968276610999,
+  "final_val_pixel_acc": 0.7332116021050348,
+  "total_time_minutes": 6.643363765875498,
+  "image_size": 256,
+  "learning_rate": 0.0001,
+  "augmentation": "flip",
+  "loss": "ce",
+  "epochs": 10,
+  "subset_ratio": 0.3
+}
