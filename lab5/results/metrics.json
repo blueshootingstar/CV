@@ -1,0 +1,29 @@
+{
+  "patch_test_positive_count": 306,
+  "patch_test_negative_count": 681,
+  "patch_metrics": {
+    "tp": 293,
+    "fn": 13,
+    "fp": 16,
+    "tn": 665,
+    "accuracy": 0.9706180344478217,
+    "precision": 0.948220064724919,
+    "recall": 0.9575163398692811,
+    "f1": 0.9528455284552846,
+    "false_positive_rate": 0.023494860499265784,
+    "true_negative_rate": 0.9765051395007343
+  },
+  "chart_files": [
+    "score_histogram.png",
+    "roc_curve.png",
+    "pr_curve.png",
+    "confusion_matrix.png"
+  ],
+  "cmu_result_images": [
+    "cmu_result_01_cnn2600.png",
+    "cmu_result_02_kaari2.png",
+    "cmu_result_03_henry.png",
+    "cmu_result_04_cnn2221.png",
+    "cmu_result_05_kaari1.png"
+  ]
+}

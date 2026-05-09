@@ -1,0 +1,189 @@
+\documentclass[12pt, a4paper]{article}
+
+\usepackage[UTF8]{ctex}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{caption}
+
+\geometry{left=2.5cm, right=2.5cm, top=3cm, bottom=3cm}
+
+\lstset{
+    language=Python,
+    basicstyle=\small\ttfamily,
+    keywordstyle=\color{blue},
+    stringstyle=\color{red},
+    commentstyle=\color{green!50!black},
+    showstringspaces=false,
+    breaklines=true,
+    frame=single,
+    numbers=left,
+    numberstyle=\tiny\color{gray}
+}
+
+\setlength{\parindent}{0pt}
+
+\begin{document}
+
+\begin{center}
+    {\LARGE \textbf{《计算机视觉》实验报告}} \\[1.5cm]
+    {\large \textbf{姓名：周梓俊 \quad 学号：23120899}} \\[1cm]
+    {\large \textbf{实验 2}} \\[1.5cm]
+\end{center}
+
+% ==================== 任务 1 ====================
+\textbf{一、任务1}
+
+\begin{enumerate}[label=\textbf{\alph*)}, leftmargin=*]
+
+\item \textbf{核心代码：}
+
+\begin{lstlisting}
+h, w = img.shape[:2]
+
+# (1) 平移：构造平移矩阵，x轴+100，y轴+150
+M_translate = np.float32([[1, 0, 100], [0, 1, 150]])
+img_translate = cv2.warpAffine(img, M_translate, (w, h))
+
+# (2) 缩放到指定尺寸 1024*768
+img_resize1 = cv2.resize(img, (1024, 768))
+# 按比例缩小 60%
+img_resize2 = cv2.resize(img, None, fx=0.6, fy=0.6)
+
+# (3) 翻转：1=水平, 0=垂直, -1=水平+垂直
+img_flip_h = cv2.flip(img, 1)
+img_flip_v = cv2.flip(img, 0)
+img_flip_hv = cv2.flip(img, -1)
+
+# (4) 旋转：以图片中心为旋转中心，旋转60度
+center = (w // 2, h // 2)
+M_rotate = cv2.getRotationMatrix2D(center, 60, 1.0)
+img_rotate = cv2.warpAffine(img, M_rotate, (w, h))
+
+# (5) 缩略：缩小到1/4，放到原图左上角
+img_thumbnail = img.copy()
+small = cv2.resize(img, (w // 4, h // 4))
+sh, sw = small.shape[:2]
+img_thumbnail[0:sh, 0:sw] = small
+\end{lstlisting}
+
+\item \textbf{实验结果截图}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.45\textwidth]{test.jpg}
+    \\[2pt]{\small 原图}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \begin{minipage}{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{translate.jpg}
+        \\[2pt]{\small (1) 平移 x=100, y=150}
+    \end{minipage}\hfill
+    \begin{minipage}{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{resize_1024x768.jpg}
+        \\[2pt]{\small (2) 缩放到1024×768}
+    \end{minipage}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \begin{minipage}{0.3\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{resize_60.jpg}
+        \\[2pt]{\small (2) 按比例缩小60\%}
+    \end{minipage}\hfill
+    \begin{minipage}{0.3\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{flip_horizontal.jpg}
+        \\[2pt]{\small (3) 水平翻转}
+    \end{minipage}\hfill
+    \begin{minipage}{0.3\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{flip_vertical.jpg}
+        \\[2pt]{\small (3) 垂直翻转}
+    \end{minipage}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \begin{minipage}{0.3\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{flip_hv.jpg}
+        \\[2pt]{\small (3) 水平+垂直翻转}
+    \end{minipage}\hfill
+    \begin{minipage}{0.3\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{rotate_45.jpg}
+        \\[2pt]{\small (4) 旋转60度}
+    \end{minipage}\hfill
+    \begin{minipage}{0.3\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{thumbnail.jpg}
+        \\[2pt]{\small (5) 缩略图}
+    \end{minipage}
+\end{figure}
+
+\item \textbf{实验小结}
+
+在任务1中，我对图像进行了五种几何变换操作。平移操作通过构造仿射变换矩阵，使用 warpAffine 实现图像在x和y方向上的偏移。缩放操作分别使用了指定目标尺寸和按比例缩放两种方式。翻转操作通过 flip 函数的不同参数实现了水平、垂直和水平+垂直三种翻转效果。旋转操作通过 getRotationMatrix2D 计算旋转矩阵，以图像中心为旋转中心进行旋转。缩略操作则是将缩小后的图像通过数组切片直接覆盖到原图的左上角区域。
+
+\end{enumerate}
+
+\vspace{1cm}
+
+% ==================== 任务 2 ====================
+\textbf{二、任务2}
+
+\begin{enumerate}[label=\textbf{\alph*)}, leftmargin=*]
+
+\item \textbf{核心代码：}
+
+\begin{lstlisting}
+# 转换为灰度图
+gray = cv2.cvtColor(img2, cv2.COLOR_BGR2GRAY)
+
+# 调整为正方形（边长不小于500像素）
+gh, gw = gray.shape[:2]
+side = max(gh, gw, 500)
+gray_square = cv2.resize(gray, (side, side))
+
+# 创建圆形掩膜
+mask = np.zeros((side, side), dtype=np.uint8)
+center2 = (side // 2, side // 2)
+radius = side // 2
+cv2.circle(mask, center2, radius, 255, -1)
+
+# 位运算实现圆形切片
+result = cv2.bitwise_and(gray_square, gray_square, mask=mask)
+\end{lstlisting}
+
+\item \textbf{实验结果截图}
+
+\begin{figure}[H]
+    \centering
+    \begin{minipage}{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{test.jpg}
+        \\[2pt]{\small 原图}
+    \end{minipage}\hfill
+    \begin{minipage}{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{circle_mask.jpg}
+        \\[2pt]{\small 圆形掩膜切片结果}
+    \end{minipage}
+\end{figure}
+
+\item \textbf{实验小结}
+
+在任务2中，我首先将彩色图像转换为灰度图像，然后通过 resize 将其调整为正方形（边长取原图最大边与500的较大值）。接着创建了一个与图像同尺寸的全黑掩膜，并在掩膜上以图像中心为圆心、边长一半为半径画一个白色填充圆。最后通过 bitwise\_and 位运算将掩膜应用到灰度图上，实现了圆形区域的切片效果，圆形以外的区域变成黑色。
+
+\end{enumerate}
+
+\end{document}

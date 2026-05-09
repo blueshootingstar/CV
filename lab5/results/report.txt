@@ -1,0 +1,48 @@
+Lab 5 report
+==============================
+Training dataset: MIT face/nonface patch dataset
+Positive samples (all): 2706
+Negative samples (all): 4381
+Patch size: 20x20
+Haar feature pool size: 15825
+Selected Haar features: 10000
+Cascade stages: 5
+Final threshold: 10.2994
+
+Held-out MIT patch test split:
+  Positive test patches: 306
+  Negative test patches: 681
+  Accuracy: 0.9706
+  Precision: 0.9482
+  Recall: 0.9575
+  F1: 0.9528
+  False positive rate: 0.0235
+  Confusion matrix: TP=293, FN=13, FP=16, TN=665
+  Interpretation: these metrics are measured on isolated 20x20 face/non-face patches.
+  Scene-level sliding-window detection is harder because one image produces many candidate windows,
+  so even a low patch-level false positive rate can still create several false alarms on a full image.
+
+External visualization dataset:
+  CMU frontal_images (folders: test, newtest, test-low)
+  Note: used only for qualitative face detection visualization, not for patch-level classification metrics.
+  Visualization results saved: 5
+
+Generated charts:
+  - score_histogram.png
+  - roc_curve.png
+  - pr_curve.png
+  - confusion_matrix.png
+  - cmu_result_01_cnn2600.png
+  - cmu_result_02_kaari2.png
+  - cmu_result_03_henry.png
+  - cmu_result_04_cnn2221.png
+  - cmu_result_05_kaari1.png
+
+Per-stage summary:
+  Stage 1: learners=10, threshold=-2.4956, train_det=0.9986, train_fp=0.4000, val_det=0.9900, val_fp=0.4000
+  Stage 2: learners=16, threshold=-2.6722, train_det=0.9986, train_fp=0.6586, val_det=0.9967, val_fp=0.6800
+  Stage 3: learners=24, threshold=-2.0604, train_det=0.9986, train_fp=0.5077, val_det=0.9867, val_fp=0.4632
+  Stage 4: learners=32, threshold=-1.7997, train_det=0.9986, train_fp=0.4579, val_det=0.9933, val_fp=0.6349
+  Stage 5: learners=40, threshold=-1.4252, train_det=0.9986, train_fp=0.2143, val_det=0.9800, val_fp=0.5750
+
+Elapsed time (seconds): 291.17

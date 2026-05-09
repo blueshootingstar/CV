@@ -1,0 +1,207 @@
+\documentclass[12pt, a4paper]{article}
+
+\usepackage[UTF8]{ctex}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{caption}
+
+\geometry{left=2.5cm, right=2.5cm, top=3cm, bottom=3cm}
+
+\lstset{
+    language=Python,
+    basicstyle=\small\ttfamily,
+    keywordstyle=\color{blue},
+    stringstyle=\color{red},
+    commentstyle=\color{green!50!black},
+    showstringspaces=false,
+    breaklines=true,
+    frame=single,
+    numbers=left,
+    numberstyle=\tiny\color{gray}
+}
+
+\setlength{\parindent}{0pt}
+
+\begin{document}
+
+\begin{center}
+    {\LARGE \textbf{《计算机视觉》实验报告}} \\[1.5cm]
+    {\large \textbf{姓名：周梓俊 \quad 学号：23120899}} \\[1cm]
+    {\large \textbf{实验 3}} \\[1.5cm]
+\end{center}
+
+% ==================== 任务 1 ====================
+\textbf{一、任务1}
+
+\begin{enumerate}[label=\textbf{\alph*)}, leftmargin=*]
+
+\item \textbf{核心代码：}
+
+\begin{lstlisting}
+# 转换为HSV空间
+hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+
+# 分离RGB通道和HSV通道
+b, g, r = cv2.split(img)
+h_ch, s_ch, v_ch = cv2.split(hsv)
+
+# 对RGB三个通道画三维图
+rows = np.arange(0, img.shape[0])
+cols = np.arange(0, img.shape[1])
+X, Y = np.meshgrid(cols, rows)
+
+# 采样防止图太大卡死
+step = max(1, max(img.shape[0], img.shape[1]) // 100)
+X_s = X[::step, ::step]
+Y_s = Y[::step, ::step]
+
+ax1 = fig.add_subplot(131, projection='3d')
+ax1.plot_surface(X_s, Y_s, r[::step, ::step], cmap='Reds')
+
+ax2 = fig.add_subplot(132, projection='3d')
+ax2.plot_surface(X_s, Y_s, g[::step, ::step], cmap='Greens')
+
+ax3 = fig.add_subplot(133, projection='3d')
+ax3.plot_surface(X_s, Y_s, b[::step, ::step], cmap='Blues')
+\end{lstlisting}
+
+\item \textbf{实验结果截图}
+
+\begin{figure}[H]
+    \centering
+    \begin{minipage}{0.3\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{R_channel.png}
+        \\[2pt]{\small R通道}
+    \end{minipage}\hfill
+    \begin{minipage}{0.3\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{G_channel.png}
+        \\[2pt]{\small G通道}
+    \end{minipage}\hfill
+    \begin{minipage}{0.3\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{B_channel.png}
+        \\[2pt]{\small B通道}
+    \end{minipage}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \begin{minipage}{0.3\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{H_channel.png}
+        \\[2pt]{\small H通道}
+    \end{minipage}\hfill
+    \begin{minipage}{0.3\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{S_channel.png}
+        \\[2pt]{\small S通道}
+    \end{minipage}\hfill
+    \begin{minipage}{0.3\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{V_channel.png}
+        \\[2pt]{\small V通道}
+    \end{minipage}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{rgb_3d_surface.png}
+    \\[4pt]{\small RGB三通道三维图}
+\end{figure}
+
+\item \textbf{实验小结}
+
+在任务1中，我首先将图像从BGR颜色空间转换为HSV颜色空间，然后使用 cv2.split 分别分离了RGB三个通道和HSV三个通道并显示。接着利用 matplotlib 的 plot\_surface 函数对R、G、B三个通道分别绘制了三维表面图，其中x和y轴表示像素坐标，z轴表示该通道的像素值。为了防止图片过大导致渲染缓慢，对像素进行了等间距采样。
+
+\end{enumerate}
+
+\vspace{1cm}
+
+% ==================== 任务 2 ====================
+\textbf{二、任务2}
+
+\begin{enumerate}[label=\textbf{\alph*)}, leftmargin=*]
+
+\item \textbf{核心代码：}
+
+\begin{lstlisting}
+home_color = cv2.imread("home_color.png")
+home_gray = cv2.cvtColor(home_color, cv2.COLOR_BGR2GRAY)
+
+# 灰度直方图
+gray_hist = cv2.calcHist([home_gray], [0], None, [256], [0, 256])
+
+# 彩色直方图（B/G/R三通道分别计算）
+colors = ('b', 'g', 'r')
+for i, col in enumerate(colors):
+    hist = cv2.calcHist([home_color], [i], None, [256], [0, 256])
+    axes[1, 1].plot(hist, color=col)
+
+# ROI直方图，ROI区域 x:50-100, y:100-200
+mask = np.zeros(home_gray.shape[:2], dtype=np.uint8)
+mask[100:200, 50:100] = 255
+roi_img = cv2.bitwise_and(home_color, home_color, mask=mask)
+roi_hist = cv2.calcHist([home_gray], [0], mask, [256], [0, 256])
+\end{lstlisting}
+
+\item \textbf{实验结果截图}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{histogram_gray_color.png}
+    \\[4pt]{\small 灰度直方图与彩色直方图}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{roi_histogram.png}
+    \\[4pt]{\small ROI区域：原图、Mask、ROI提取结果、ROI直方图}
+\end{figure}
+
+\item \textbf{实验小结}
+
+在任务2中，我使用 cv2.calcHist 函数分别计算了灰度图的直方图和彩色图的BGR三通道直方图，并将原图与对应直方图拼接在同一个窗口中显示。对于ROI区域，通过创建一个指定区域为白色的mask，利用 bitwise\_and 提取了感兴趣区域的图像，并计算了该区域的灰度直方图。最终将原图、mask图、ROI提取结果和ROI直方图放在同一个窗口内展示。
+
+\end{enumerate}
+
+\vspace{1cm}
+
+% ==================== 任务 3 ====================
+\textbf{三、任务3}
+
+\begin{enumerate}[label=\textbf{\alph*)}, leftmargin=*]
+
+\item \textbf{核心代码：}
+
+\begin{lstlisting}
+gray3 = cv2.cvtColor(img3, cv2.COLOR_BGR2GRAY)
+
+# 直方图均衡化
+equalized = cv2.equalizeHist(gray3)
+
+# 计算均衡化前后的直方图
+hist_before = cv2.calcHist([gray3], [0], None, [256], [0, 256])
+hist_after = cv2.calcHist([equalized], [0], None, [256], [0, 256])
+\end{lstlisting}
+
+\item \textbf{实验结果截图}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{histogram_equalization.png}
+    \\[4pt]{\small 直方图均衡化前后对比}
+\end{figure}
+
+\item \textbf{实验小结}
+
+在任务3中，我使用 cv2.equalizeHist 函数对灰度图像进行了直方图均衡化处理。均衡化前的直方图像素值分布集中在某些区间，均衡化后像素值分布更加均匀，图像的对比度得到了明显提升，暗部细节更加清晰。
+
+\end{enumerate}
+
+\end{document}
